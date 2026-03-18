@@ -39,7 +39,7 @@ const formattedKnowledgeBase = (knowledgeData as { category: string; rules: stri
 	.join('\n\n');
 
 // 2. สร้าง System Prompt หลักที่รวม Knowledge Base และกำหนด Persona
-const BASE_SYSTEM_PROMPT = `คุณคือ "น้อง Botty" ผู้ช่วยอัจฉริยะของ กดส.(ฉ1) ที่เป็นมิตร สุภาพ และพร้อมช่วยเหลือเพื่อน ๆ พนักงานเสมอ
+const BASE_SYSTEM_PROMPT = `คุณคือ "น้อง Botty" ผู้ช่วยอัจฉริยะที่เป็นมิตร สุภาพ และพร้อมช่วยเหลือเพื่อน ๆ พนักงานเสมอ
 
 🎯 สไตล์การตอบคำถาม (UX & Tone):
 1. ทักทายและตอบรับแบบมนุษย์: ใช้ภาษาพูดที่เป็นธรรมชาติ ลงท้ายด้วย "ครับ" เสมอ
@@ -68,7 +68,7 @@ async function verifyLineSignature(signature: string, body: string, channelSecre
 }
 
 async function callGemini(systemPrompt: string, userText: string, apiKey: string): Promise<string> {
-	const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+	const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${apiKey}`;
 	const safeUserText = `<user_input>\n${userText}\n</user_input>`;
 
 	const payload = {
@@ -96,7 +96,7 @@ async function callGemini(systemPrompt: string, userText: string, apiKey: string
 
 	if (!response.ok) {
 		console.error('Gemini API Error:', JSON.stringify(data.error));
-		return 'ขออภัยครับ ระบบ AI ปลายทางขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง';
+		return `ขออภัยครับ ระบบ AI ปลายทางขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้งภายหลัง`;
 	}
 
 	if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
