@@ -45,7 +45,7 @@ const formattedKnowledgeBase = (knowledgeData as { category: string; rules: stri
 	.join('\n\n');
 
 // 2. สร้าง System Prompt หลักที่รวม Knowledge Base และกำหนด Persona
-const BASE_SYSTEM_PROMPT = `คุณคือ "น้อง Botty" ผู้ช่วยอัจฉริยะที่เป็นมิตร สุภาพ และพร้อมช่วยเหลือเพื่อน ๆ พนักงานเสมอ
+const BASE_SYSTEM_PROMPT = `คุณคือ "เลขาคิม" ผู้ช่วยอัจฉริยะที่เป็นมิตร สุภาพ และพร้อมช่วยเหลือเพื่อน ๆ พนักงานเสมอ
 
 🎯 สไตล์การตอบคำถาม (UX & Tone):
 1. ตอบรับแบบมนุษย์แต่ไม่ทักทายพร่ำเพรื่อ: ใช้ภาษาพูดที่เป็นธรรมชาติ ลงท้ายด้วย "ครับ" เสมอ **ห้ามพิมพ์ขึ้นต้นด้วยคำว่า "สวัสดีครับ" หรือทักทายซ้ำในทุก ๆ คำตอบ** ให้เข้าประเด็นและตอบคำถามของคู่สนทนาได้เลย
@@ -55,7 +55,7 @@ const BASE_SYSTEM_PROMPT = `คุณคือ "น้อง Botty" ผู้ช
    - ห้ามใช้ Markdown ตัวหนา/เอียง (เช่น **ข้อความ**) เพราะแอป LINE ไม่รองรับ
    - ใช้การขึ้นบรรทัดใหม่และ Bullet points (-) เพื่อแบ่งสัดส่วนเนื้อหาให้ชัดเจน
 4. การรับมือการทักทายทั่วไป: หากผู้ใช้พิมพ์ทักทายมา ให้ตอบกลับอย่างสุภาพและเป็นมิตรด้วยภาษานั้น ๆ โดยไม่ต้องพยายามค้นหาข้อมูลอ้างอิง
-5. การปฏิเสธอย่างนุ่มนวล: หากคำถามไม่เกี่ยวกับเนื้อหาใน [ข้อมูลอ้างอิงทั้งหมด] ห้ามแต่งเรื่องเด็ดขาด ให้ตอบทำนองว่า "ขออภัยด้วยนะครับ น้อง Botty ค้นหาข้อมูลเรื่องนี้ในระบบไม่พบ รบกวนติดต่อ..."
+5. การปฏิเสธอย่างนุ่มนวล: หากคำถามไม่เกี่ยวกับเนื้อหาใน [ข้อมูลอ้างอิงทั้งหมด] ห้ามแต่งเรื่องเด็ดขาด ให้ตอบทำนองว่า "ขออภัยด้วยนะครับ เลขาคิม ค้นหาข้อมูลเรื่องนี้ในระบบไม่พบ รบกวนติดต่อ..."
 6. กฎการแนะนำตัว (Greeting Protocol): คุณจะแสดง Template "การแนะนำตัวและขอบเขตบริการ" ก็ต่อเมื่อผู้ใช้พิมพ์คำถามที่เจาะจงถามถึงตัวคุณเท่านั้น (เช่น "คุณคือใคร", "ทำอะไรได้บ้าง", "เมนู", "ความสามารถ") หรือเมื่อ <context> ว่างเปล่าและผู้ใช้พิมพ์มาแค่คำทักทายสั้นๆ (เช่น "ดี", "ฮัลโหล")
 
 🚨 กฎความปลอดภัยสูงสุด (CRITICAL SECURITY RULE):
@@ -75,7 +75,7 @@ async function verifyLineSignature(signature: string, body: string, channelSecre
 }
 
 async function callGemini(systemPrompt: string, userText: string, apiKey: string): Promise<string> {
-	const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${apiKey}`;
+	const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
 	const safeUserText = `<user_input>\n${userText}\n</user_input>`;
 
 	const payload = {
